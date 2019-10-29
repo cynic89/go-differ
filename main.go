@@ -6,6 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"io/ioutil"
 	"os"
+	"sort"
 	"strings"
 )
 
@@ -71,8 +72,20 @@ func getParseable(filename string, data []byte) (Parseable, error) {
 }
 
 func printResults(diff map[string]interface{})  {
-	for k, v := range diff{
-		fmt.Printf("%v => %v", k, v)
+
+	var keys []string
+	for k, _ := range diff{
+		keys = append(keys, k)
+	}
+
+	sort.Strings(keys)
+
+	if len(keys) <= 0{
+		fmt.Println("No Changes found")
+	}
+
+	for _, k := range keys{
+		fmt.Printf("%v => %v", k, diff[k])
 		fmt.Println()
 	}
 }
